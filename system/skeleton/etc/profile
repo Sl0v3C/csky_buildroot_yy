@@ -2,14 +2,17 @@ export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
 if [ "$PS1" ]; then
 	if [ "`id -u`" -eq 0 ]; then
-		export PS1='# '
+		export PS1='\[\e[32;40m\]\u@\[\e[35;40m\]\t\[\e[34;40m\]\W\[\e[35;40m\]:# \[\e[0m\]'
 	else
-		export PS1='$ '
+		export PS1='\[\e[32;40m\]\u@\[\e[35;40m\]\t\[\e[34;40m\]\W\[\e[35;40m\]:$ \[\e[0m\]'
 	fi
 fi
 
+alias vi='vim'
+alias ll='ls -alh'
+alias cc='cd ..'
 export PAGER='/bin/more '
-export EDITOR='/bin/vi'
+export EDITOR='/usr/bin/vim'
 
 # Source configuration files from /etc/profile.d
 for i in /etc/profile.d/*.sh ; do

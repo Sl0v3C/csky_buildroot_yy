@@ -1865,6 +1865,7 @@ menu "Text editors and viewers"
 	source "package/nano/Config.in"
 	source "package/uemacs/Config.in"
 	source "package/vim/Config.in"
+	source "package/ctags/Config.in"
 endmenu
 
 endmenu

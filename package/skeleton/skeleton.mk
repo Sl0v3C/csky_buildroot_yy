@@ -196,6 +196,26 @@ endif
 define SKELETON_SET_ROOT_PASSWD
 	$(SED) s,^root:[^:]*:,root:$(SKELETON_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
 endef
+
+# Added by PYY Start. For csky user passwd & change csky as the home path owner & copy .vim* and wifi_work.sh to ~
+SKELETON_TARGET_GENERIC_CSKY_PASSWD = "csky"
+SKELETON_CSKY_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_CSKY_PASSWD)"`"
+
+define SKELETON_SET_CSKY_PASSWD
+	$(SED) s,^csky:[^:]*:,csky:$(SKELETON_CSKY_PASSWORD):, $(TARGET_DIR)/etc/shadow
+endef
+
+NEEDSED = $(shell /bin/grep -rsn "csky\|\.vim" $(TARGET_DIR)/etc/inittab)
+ifeq ($(NEEDSED),)
+define SKELETON_SET_CSKY_HOME
+	/bin/sed -i 's/\(etc\/init.d\/rcS\)/\1\n::sysinit:\/bin\/chown -R csky:csky \/home\n::sysinit:\/bin\/cp \/tmp\/.vim* \/tmp\/wifi_work.sh \/home\/csky\/ -rf/' $(TARGET_DIR)/etc/inittab
+endef
+endif
+
+TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_PASSWD \
+                         SKELETON_SET_CSKY_HOME
+# End
+
 TARGET_FINALIZE_HOOKS += SKELETON_SET_ROOT_PASSWD
 
 ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)

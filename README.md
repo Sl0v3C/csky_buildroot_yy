@@ -5,4 +5,4 @@ Maybe more than those.
 The csky gx6605s introduction can visit [C-SKY Linux Arch介绍](https://c-sky.github.io/).
 
 ## Updates
-1. 
+1. Add ctags 

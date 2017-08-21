@@ -1,0 +1,7 @@
+config BR2_PACKAGE_CTAGS
+	bool "ctags"
+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+	help
+          Ctags generates an index (or tag) file of language objects
+          found in source files that allows these items to be quickly
+          and easily located by a text editor or other utility.

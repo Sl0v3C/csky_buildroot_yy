@@ -208,13 +208,16 @@ endef
 NEEDSED = $(shell /bin/grep -rsn "csky\|\.vim" $(TARGET_DIR)/etc/inittab)
 ifeq ($(NEEDSED),)
 define SKELETON_SET_CSKY_HOME
-	/bin/sed -i 's/\(etc\/init.d\/rcS\)/\1\n::sysinit:\/bin\/chown -R csky:csky \/home\n::sysinit:\/bin\/cp \/tmp\/.vim* \/tmp\/wifi_work.sh \/home\/csky\/ -rf/' $(TARGET_DIR)/etc/inittab
+	/bin/sed -i 's/\(etc\/init.d\/rcS\)/\1\n::sysinit:\/bin\/chown -R csky:csky \/home\n::sysinit:\/bin\/cp \/temp\/.vim* \/temp\/wifi_work.sh \/home\/csky\/ -rf/' $(TARGET_DIR)/etc/inittab; \
+	/bin/sed -i 's/\(\/home\/csky\/ -rf\)/\1\n::sysinit:\/bin\/mv \/temp\/remove.sh \/usr\/bin\/removeINIT\n::sysinit:\/bin\/rm -rf \/temp/' $(TARGET_DIR)/etc/inittab; \
+	/bin/sed -i 's/\(\/bin\/rm -rf \/temp\)/\1\n::sysinit:\/bin\/chmod 775 \/usr\/bin\/removeINIT\n::sysinit:\/usr\/bin\/removeINIT/' $(TARGET_DIR)/etc/inittab; \
+	/bin/sed -i 's/\(root ALL=(ALL) ALL\)/\1\ncsky ALL=(ALL) ALL/' $(TARGET_DIR)/etc/sudoers
 endef
 endif
 
 TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_PASSWD \
                          SKELETON_SET_CSKY_HOME
-# End
+# Added by PYY End
 
 TARGET_FINALIZE_HOOKS += SKELETON_SET_ROOT_PASSWD
 

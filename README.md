@@ -60,4 +60,6 @@ The csky gx6605s introduction can visit [C-SKY Linux Arch介绍](https://c-sky.g
 * Copy those files to /home/csky when the 1st time booting
 * Copy /temp/remove.sh to /usr/bin/removeINIT & chmod 755
 * Add csky in /etc/sudoers, then it can use sudo command to grant permission
-* Run remove.sh to remove above command from /etc/inittab to avoid exec them every booting time
+* Run remove.sh to remove above command from /etc/inittab to avoid exec them every booting time  
+* Add cacert.pem which downloaded from [curl](https://curl.haxx.se/docs/caextract.html) to fix HTTPS cannot access issue  
+* Add get-pip.py which downloaded from [pypa](https://bootstrap.pypa.io/get-pip.py) to install pip and wheel

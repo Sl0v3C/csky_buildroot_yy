@@ -1,4 +1,5 @@
-export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/etc/ssl/certs
+export CURL_CA_BUNDLE=/etc/ssl/certs/cacert.pem
 
 if [ "$PS1" ]; then
 	if [ "`id -u`" -eq 0 ]; then
@@ -11,6 +12,8 @@ fi
 alias vi='vim'
 alias ll='ls -alh'
 alias cc='cd ..'
+alias wget='wget --ca-certificate=/etc/ssl/certs/cacert.pem'
+
 export PAGER='/bin/more '
 export EDITOR='/usr/bin/vim'
 

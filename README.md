@@ -24,7 +24,7 @@ The csky gx6605s introduction can visit [C-SKY Linux Arch介绍](https://c-sky.g
 		<td align="center">use framebuffer console</td>
     </tr>
 </table>  
-&nbsp;&nbsp;&nbsp;&nbsp;If no error, it will generate ```usb.img``` in the ```output/images``` path.  
+&nbsp;&nbsp;&nbsp;&nbsp;If no error, it will generate usb.img in the output/images path.  
 
 *  Plugin USB disk, If the USB disk recognized as the /dev/sdc, then you should run:
    <pre>
@@ -94,7 +94,7 @@ csky gx6605s平台是国芯推出的一款开发板，我们希望能够将这�
 		<td align="center">通过HDMI作为终端输出</td>
     </tr>
 </table>  
-&nbsp;&nbsp;&nbsp;&nbsp;如果编译成功，会在```output/images```目录生成```usb.img```。 
+&nbsp;&nbsp;&nbsp;&nbsp;如果编译成功，会在output/images目录生成usb.img。 
 
 *  插入U盘，如果U盘被识别为```/dev/sdc```，则可以执行下面步骤：
    <pre>

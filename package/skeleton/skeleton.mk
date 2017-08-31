@@ -217,9 +217,21 @@ define SKELETON_SET_CSKY_HOME
 	/bin/sed -i 's/\(root ALL=(ALL) ALL\)/\1\ncsky ALL=(ALL) ALL/' $(TARGET_DIR)/etc/sudoers
 endef
 endif
+NEEDSETDATE = $(shell /bin/grep -rsn "date" $(TARGET_DIR)/etc/inittab)
+DATE = $(shell /bin/date +"%Y-%m-%d %H:%M:%S")
+ifeq ($(NEEDSETDATE),)
+define SKELETON_SET_DATE
+	/bin/sed -i 's/\(::sysinit:\/usr\/bin\/removeINIT\)/\1\n::sysinit:\/bin\/date -s \"$(DATE)\"/' $(TARGET_DIR)/etc/inittab
+endef
+endif
 
-TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_PASSWD \
-                         SKELETON_SET_CSKY_HOME
+TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_PASSWD
+ifeq ($(NEEDSED),)
+TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_HOME
+endif
+ifeq ($(NEEDSETDATE),)
+TARGET_FINALIZE_HOOKS += SKELETON_SET_DATE
+endif
 # Added by PYY End
 
 TARGET_FINALIZE_HOOKS += SKELETON_SET_ROOT_PASSWD

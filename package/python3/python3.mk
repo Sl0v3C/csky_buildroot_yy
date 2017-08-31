@@ -156,11 +156,11 @@ PYTHON3_CONF_OPTS += \
 	--with-system-ffi \
 	--disable-pydoc \
 	--disable-test-modules \
-	--disable-lib2to3 \
 	--disable-tk \
 	--disable-nis \
 	--disable-idle3 \
 	--disable-pyc-build
+#	--disable-lib2to3 \
 
 # Python builds two tools to generate code: 'pgen' and
 # '_freeze_importlib'. Unfortunately, for the target Python, they are

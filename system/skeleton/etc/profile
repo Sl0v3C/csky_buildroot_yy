@@ -3,9 +3,11 @@ export CURL_CA_BUNDLE=/etc/ssl/certs/cacert.pem
 
 if [ "$PS1" ]; then
 	if [ "`id -u`" -eq 0 ]; then
-		export PS1='\[\e[32;40m\]\u@\[\e[35;40m\]\t\[\e[34;40m\]\W\[\e[35;40m\]:# \[\e[0m\]'
+                PS1="\[\e[37;1m\]PATH: \w\e[0m\n"
+		export PS1="$PS1\[\e[32;40m\]\u@\[\e[35;40m\]\t\[\e[34;40m\]\W\[\e[35;40m\]:# \[\e[0m\]"
 	else
-		export PS1='\[\e[32;40m\]\u@\[\e[35;40m\]\t\[\e[34;40m\]\W\[\e[35;40m\]:$ \[\e[0m\]'
+                PS1="\[\e[37;1m\]PATH: \w\e[0m\n"
+		export PS1="$PS1\[\e[32;40m\]\u@\[\e[35;40m\]\t\[\e[34;40m\]\W\[\e[35;40m\]:$ \[\e[0m\]"
 	fi
 fi
 

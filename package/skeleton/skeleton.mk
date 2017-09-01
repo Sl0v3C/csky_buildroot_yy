@@ -208,8 +208,7 @@ endef
 NEEDSED = $(shell /bin/grep -rsn "csky\|\.vim" $(TARGET_DIR)/etc/inittab)
 ifeq ($(NEEDSED),)
 define SKELETON_SET_CSKY_HOME
-	/bin/sed -i 's/\(etc\/init.d\/rcS\)/\1\n::sysinit:\/bin\/mv \/temp\/.vim* \/temp\/wifi_work.sh \/temp\/get-pip.py \/home\/csky\/\n::sysinit:\/bin\/chown -R csky:csky \/home/' \
-            $(TARGET_DIR)/etc/inittab; \
+	/bin/sed -i 's/\(etc\/init.d\/rcS\)/\1\n::sysinit:\/bin\/mv \/temp\/.vim* \/temp\/wifi_work.sh \/temp\/get-pip.py \/temp\/future-0.16.0 \/temp\/Minecraft \/temp\/pyglet-1.3.0rc1-py2.py3-none-any.whl \/home\/csky\/\n::sysinit:\/bin\/chown -R csky:csky \/home/' $(TARGET_DIR)/etc/inittab; \
 	/bin/sed -i 's/\(-R csky:csky .*\)/\1\n::sysinit:\/bin\/chmod -R 775 \/home\/csky\/.vim*/' $(TARGET_DIR)/etc/inittab; \
 	/bin/sed -i 's/\(chmod -R 775 .*\)/\1\n::sysinit:\/bin\/mv \/temp\/ca* \/etc\/ssl\/certs\//' $(TARGET_DIR)/etc/inittab; \
 	/bin/sed -i 's/\(\/etc\/ssl\/certs\/.*\)/\1\n::sysinit:\/bin\/mv \/temp\/remove.sh \/usr\/bin\/removeINIT\n::sysinit:\/bin\/rm -rf \/temp/' $(TARGET_DIR)/etc/inittab; \

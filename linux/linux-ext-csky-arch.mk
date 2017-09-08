@@ -8,6 +8,7 @@ LINUX_EXTENSIONS += csky-arch
 
 ifeq ($(BR2_LINUX_KERNEL_EXT_CSKY_ADDONS),y)
 define CSKY_ARCH_PREPARE_KERNEL
+	echo "CONFIG_SWAP=y" >> $(CSKY_ARCH_DIR)/arch/csky/configs/gx66xx_defconfig; \
 	cp -raf $(CSKY_ARCH_DIR)/arch/csky $(LINUX_DIR)/arch/
 endef
 else

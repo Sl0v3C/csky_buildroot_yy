@@ -18,6 +18,7 @@ alias wget='wget --ca-certificate=/etc/ssl/certs/cacert.pem'
 
 export PAGER='/bin/more '
 export EDITOR='/usr/bin/vim'
+export DISPLAY=:0
 
 # Source configuration files from /etc/profile.d
 for i in /etc/profile.d/*.sh ; do

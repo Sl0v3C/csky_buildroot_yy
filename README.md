@@ -66,6 +66,13 @@ The csky gx6605s introduction can visit [C-SKY Linux Arch介绍](https://c-sky.g
 * Run ```remove.sh``` to remove above command from /etc/inittab to avoid exec them every booting time
 * Add ```cacert.pem``` which downloaded from [curl](https://curl.haxx.se/docs/caextract.html) to fix HTTPS cannot access issue  
 * Add ```get-pip.py``` which downloaded from [pypa](https://bootstrap.pypa.io/get-pip.py) to install pip and wheel 
+* Remove Minecaft & future-0.16.0 & pyglet-1.3.0rc1-py2.py3-none-any.whl files to decrease the delay during booting
+* Exec Xorg & in rcS during startup
+* Exec matchbox-window-manager & and xterm & when login in
+* Add eth_work.sh to enable ethernet connect work
+* Add .Xresources & xinitrc & xserverrc & xorg.conf files for xterm/xinit/Xorg
+* Add CONFIG_SWAP=y in linux-ext-csky-arch.mk
+* Add swapfile.sh for create 128M swap file & mkswap then swapon it to fix "out of memory" issue
 
 # 中文说明(README in Chinese version)
 本源码基于[c-sky/buildroot](https://github.com/c-sky/buildroot)，同时增加了一些东西，尝试将csky gx6605s配置成一个Python学习开发的环境或者vim的编辑和阅读代码的工具等等使其更加丰富好玩。  
@@ -134,3 +141,10 @@ csky gx6605s平台是国芯推出的一款开发板，我们希望能够将这�
 * 执行remove.sh来删除掉在/etc/inittab里用于执行上述工作的一些命令，避免这些命令重复执行
 * 添加```cacert.pem```，通过[curl](https://curl.haxx.se/docs/caextract.html)下载的证书文件，用于解决HTTPS无法访问的问题。  
 * 添加```get-pip.py```，通过[pypa](https://bootstrap.pypa.io/get-pip.py)下载的用于安装pip和wheel。
+* 删除Minecaft，future-0.16.0和pyglet-1.3.0rc1-py2.py3-none-any.whl以减少开机延迟，通过创建swap文件解决安装pyglet等发生的out of memory问题。
+* 在rcS里执行Xorg &，这个文件会在开机阶段执行，可以察看inittab
+* 当用户登陆时会执行matchbox-window-manager &和xterm &，可以通过Ctrl + Alt + F2进入xterm
+* 添加eth_work.sh脚本来开启有线上网
+* 为xterm添加.Xresources, 为xinit添加xinitrc和xserverrc，为Xorg添加xorg.conf
+* 在linux-ext-csky-arch.mk添加CONFIG_SWAP=y，这样在编译内核时会开启该功能
+* 添加swapfile.sh脚本，该脚本可以创建128M大小的swap文件， 用于开启swap功能，来解决内核"out of memory"问题。

@@ -198,43 +198,68 @@ define SKELETON_SET_ROOT_PASSWD
 endef
 
 # Added by PYY Start. For csky user passwd & change csky as the home path owner & copy .vim* and wifi_work.sh to ~
-SKELETON_TARGET_GENERIC_CSKY_PASSWD = "csky"
+SKELETON_TARGET_GENERIC_CSKY_PASSWD = csky
 SKELETON_CSKY_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_CSKY_PASSWD)"`"
 
 define SKELETON_SET_CSKY_PASSWD
 	$(SED) s,^csky:[^:]*:,csky:$(SKELETON_CSKY_PASSWORD):, $(TARGET_DIR)/etc/shadow
 endef
 
-NEEDSED = $(shell /bin/grep -rsn "csky\|\.vim" $(TARGET_DIR)/etc/inittab)
-ifeq ($(NEEDSED),)
-define SKELETON_SET_CSKY_HOME
-	/bin/sed -i 's/\(etc\/init.d\/rcS\)/\1\n::sysinit:\/bin\/mv \/temp\/.vim* \/temp\/*.sh \/temp\/get-pip.py \/temp\/.Xresources \/home\/csky\/\n::sysinit:\/bin\/mv \/temp\/xinitrc \/temp\/xserverrc \/etc\/X11\/xinit\n::sysinit:\/bin\/mv \/temp\/xorg.conf \/etc\/X11\n::sysinit:\/bin\/chown -R csky:csky \/home/' $(TARGET_DIR)/etc/inittab; \
-	/bin/sed -i 's/\(-R csky:csky .*\)/\1\n::sysinit:\/bin\/chmod -R 775 \/home\/csky\/.vim*/' $(TARGET_DIR)/etc/inittab; \
-	/bin/sed -i 's/\(chmod -R 775 .*\)/\1\n::sysinit:\/bin\/mv \/temp\/xterm.sh \/etc\/profile.d\n::sysinit:\/bin\/mv \/temp\/ca* \/etc\/ssl\/certs\//' $(TARGET_DIR)/etc/inittab; \
-	/bin/sed -i 's/\(\/etc\/ssl\/certs\/.*\)/\1\n::sysinit:\/bin\/mv \/temp\/remove.sh \/usr\/bin\/removeINIT\n::sysinit:\/bin\/rm -rf \/temp/' $(TARGET_DIR)/etc/inittab; \
-	/bin/sed -i 's/\(\/bin\/rm -rf \/temp\)/\1\n::sysinit:\/bin\/chmod 775 \/usr\/bin\/removeINIT\n::sysinit:\/usr\/bin\/removeINIT/' $(TARGET_DIR)/etc/inittab; \
-	/bin/sed -i 's/\(root ALL=(ALL) ALL\)/\1\ncsky ALL=(ALL) ALL/' $(TARGET_DIR)/etc/sudoers; \
-	/bin/echo -e "\nif [ -f /usr/bin/Xorg ]; then\n    echo \"Starting Xorg: \"\n    /usr/bin/Xorg &\n    echo \"Done!\"\nfi" >> $(TARGET_DIR)/etc/init.d/rcS
+define SKELETON_COPY_FILES
+	/bin/cp  temp/ca* $(TARGET_DIR)/etc/ssl/certs/
+endef
+TARGET_FINALIZE_HOOKS += SKELETON_COPY_FILES
+
+ifeq ($(BR2_PACKAGE_XORG7),y)
+define SKELETON_COPY_X11
+	/bin/cp  temp/xinitrc temp/xserverrc $(TARGET_DIR)/etc/X11/xinit/; \
+	/bin/cp  temp/xorg.conf $(TARGET_DIR)/etc/X11/;
+endef
+TARGET_FINALIZE_HOOKS += SKELETON_COPY_X11
+endif
+
+NEEDADD = $(shell /bin/grep -rsn "temp" $(TARGET_DIR)/etc/profile)
+ifeq ($(NEEDADD),)
+ifeq ($(BR2_PACKAGE_XORG7),y)
+define SKELETON_MOVE_FILES
+	/bin/sed -i 's/\(export DISPLAY=:0\)/\1\nif [ -d \/temp ]; then\n    mv \/temp\/.vim* \/temp\/*.sh \/temp\/.Xresources \/home\/csky\/\n    rm -rf \/temp\nfi/' $(TARGET_DIR)/etc/profile
+endef
+else
+define SKELETON_MOVE_FILES
+	/bin/sed -i 's/\(export DISPLAY=:0\)/\1\nif [ -d \/temp ]; then\n    mv \/temp\/.vim* \/temp\/eth_work.sh \/temp\/swapfile.sh \/temp\/wifi_work.sh \/temp\/get_pip.sh \/home\/csky\/\n    rm -rf \/temp\nfi/' $(TARGET_DIR)/etc/profile
 endef
 endif
+TARGET_FINALIZE_HOOKS += SKELETON_MOVE_FILES
+endif
+
+NEEDADD = $(shell /bin/grep -rsn "csky" $(TARGET_DIR)/etc/sudoers)
+ifeq ($(NEEDADD),)
+define SKELETON_ADD_CSKY_SUDO
+	/bin/sed -i 's/\(root ALL=(ALL) ALL\)/\1\ncsky ALL=(ALL) NOPASSWD:ALL/' $(TARGET_DIR)/etc/sudoers;
+endef
+TARGET_FINALIZE_HOOKS += SKELETON_ADD_CSKY_SUDO
+endif
+
+NEEDADD = $(shell /bin/grep -rsn "csky" $(TARGET_DIR)/etc/init.d/rcS)
+ifeq ($(NEEDADD),)
+define SKELETON_CHOWN_TEMP_HOMECSKY
+	/bin/echo -e "\nif [ -d /temp ]; then\n    /bin/chown -R csky:csky /temp /home/csky\n    /bin/chmod 777 /temp\nfi\n" >> $(TARGET_DIR)/etc/init.d/rcS
+endef
+TARGET_FINALIZE_HOOKS += SKELETON_CHOWN_TEMP_HOMECSKY
+endif
+
 NEEDSETDATE = $(shell /bin/grep -rsn "date" $(TARGET_DIR)/etc/inittab)
 DATE = $(shell /bin/date +"%Y-%m-%d %H:%M:%S")
 ifeq ($(NEEDSETDATE),)
 define SKELETON_SET_DATE
-	/bin/sed -i 's/\(::sysinit:\/usr\/bin\/removeINIT\)/\1\n::sysinit:\/bin\/date -s \"$(DATE)\"/' $(TARGET_DIR)/etc/inittab
+	/bin/sed -i 's/\(rcS)/\1\n::sysinit:\/bin\/date -s \"$(DATE)\"/' $(TARGET_DIR)/etc/inittab
 endef
-endif
-
-TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_PASSWD
-ifeq ($(NEEDSED),)
-TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_HOME
-endif
-ifeq ($(NEEDSETDATE),)
 TARGET_FINALIZE_HOOKS += SKELETON_SET_DATE
 endif
 # Added by PYY End
 
 TARGET_FINALIZE_HOOKS += SKELETON_SET_ROOT_PASSWD
+TARGET_FINALIZE_HOOKS += SKELETON_SET_CSKY_PASSWD
 
 ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
 define SKELETON_BIN_SH

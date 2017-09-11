@@ -73,6 +73,9 @@ The csky gx6605s introduction can visit [C-SKY Linux Arch介绍](https://c-sky.g
 * Add .Xresources & xinitrc & xserverrc & xorg.conf files for xterm/xinit/Xorg
 * Add CONFIG_SWAP=y in linux-ext-csky-arch.mk
 * Add swapfile.sh for create 128M swap file & mkswap then swapon it to fix "out of memory" issue
+* Copy X window reference files when enable "BR2_PACKAGE_XORG7", not exec Xorg & xterm during booting
+* User can take ~/swapfile.sh as a reference, create 128M SWAP may be better
+* csky user exec sudo no need enter password
 
 # 中文说明(README in Chinese version)
 本源码基于[c-sky/buildroot](https://github.com/c-sky/buildroot)，同时增加了一些东西，尝试将csky gx6605s配置成一个Python学习开发的环境或者vim的编辑和阅读代码的工具等等使其更加丰富好玩。  
@@ -148,3 +151,6 @@ csky gx6605s平台是国芯推出的一款开发板，我们希望能够将这�
 * 为xterm添加.Xresources, 为xinit添加xinitrc和xserverrc，为Xorg添加xorg.conf
 * 在linux-ext-csky-arch.mk添加CONFIG_SWAP=y，这样在编译内核时会开启该功能
 * 添加swapfile.sh脚本，该脚本可以创建128M大小的swap文件， 用于开启swap功能，来解决内核"out of memory"问题。
+* 针对开启X11 CONFIG的时候才去拷贝X window相关文件，同时移除默认执行Xorg和xterm，用户自行手动开启
+* 用户可以参考~/swapfile.sh来创建swap文件，推荐创建128M大小的SWAP
+* csky用户sudo无需密码

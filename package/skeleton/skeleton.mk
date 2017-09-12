@@ -252,7 +252,7 @@ NEEDSETDATE = $(shell /bin/grep -rsn "date" $(TARGET_DIR)/etc/inittab)
 DATE = $(shell /bin/date +"%Y-%m-%d %H:%M:%S")
 ifeq ($(NEEDSETDATE),)
 define SKELETON_SET_DATE
-	/bin/sed -i 's/\(rcS)/\1\n::sysinit:\/bin\/date -s \"$(DATE)\"/' $(TARGET_DIR)/etc/inittab
+	/bin/sed -i 's/\(rcS\)/\1\n::sysinit:\/bin\/date -s \"$(DATE)\"/' $(TARGET_DIR)/etc/inittab
 endef
 TARGET_FINALIZE_HOOKS += SKELETON_SET_DATE
 endif
